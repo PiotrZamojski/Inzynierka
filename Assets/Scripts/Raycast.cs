@@ -8,7 +8,8 @@ public class Raycast : MonoBehaviour
     {
         Vector3 fwd = transform.TransformDirection(Vector3.forward);
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, fwd,out hit,handRange)){
+        
+        if(Physics.Raycast(transform.position, fwd,out hit,handRange,LayerMask.GetMask("Interactable")) || Physics.Raycast(transform.position, fwd,out hit,handRange+10,LayerMask.GetMask("Slot"))){
             Debug.DrawRay(transform.position, fwd * hit.distance, Color.yellow);
             if(hit.collider.gameObject.GetComponent<Interact_Interface>() != null){
                 print("Something i can interact with");
@@ -19,8 +20,6 @@ public class Raycast : MonoBehaviour
             }catch(System.Exception e){
                 print("Cannot get instance");
             }
-            
-
         }
         return null;
     }
