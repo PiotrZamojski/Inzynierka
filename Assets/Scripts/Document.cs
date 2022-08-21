@@ -29,7 +29,7 @@ public class Document : MonoBehaviour,Interact_Interface
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetButtonDown("Hide Message") ){
+        if(Input.GetKeyDown("h") ){
             interacting = false;
             _showImage.GetComponent<Image>().enabled = false;
         }
