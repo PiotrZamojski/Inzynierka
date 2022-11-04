@@ -84,7 +84,7 @@ public class PlayerMovement : MonoBehaviour
 
 
         GameObject pointing_at = raycast.checkHit(handRange);
-        
+
         if(pointing_at != null){
             if(pointing_at.GetComponent<HasVoltage>() != null){
                 HasVoltage power = pointing_at.GetComponent<HasVoltage>();
@@ -146,15 +146,23 @@ public class PlayerMovement : MonoBehaviour
     public void pick(GameObject nameOfObject)
     {
         if(heldObj == null){
-            if(nameOfObject.GetComponent<Rigidbody>()){
-              objRigidbody = nameOfObject.GetComponent<Rigidbody>();
-              objRigidbody.useGravity = false;
-              objRigidbody.drag = 10;
-              objRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+            if(nameOfObject.GetComponent<Rigidbody>()){     
+                print("Picking object");           
+                objRigidbody = nameOfObject.GetComponent<Rigidbody>();
+                objRigidbody.useGravity = true;
+                objRigidbody.drag = 1;
+                objRigidbody.constraints = RigidbodyConstraints.None;
+                nameOfObject.transform.parent = null;
+
+                objRigidbody.useGravity = false;
+                objRigidbody.drag = 10;
+                objRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 
 
-             nameOfObject.transform.SetParent(holdArea.transform);
-             heldObj = nameOfObject;
+                nameOfObject.transform.SetParent(holdArea.transform);
+                nameOfObject.layer = LayerMask.NameToLayer("Holded");
+                heldObj = nameOfObject;
+                             
             }
         }
         //check which hand is free then attach an object
@@ -169,6 +177,7 @@ public class PlayerMovement : MonoBehaviour
             objRigidbody.drag = 1;
             objRigidbody.constraints = RigidbodyConstraints.None;
             heldObj.transform.parent = null;
+            heldObj.layer = LayerMask.NameToLayer("Interactable");
             heldObj = null;
         }
     }
@@ -179,6 +188,16 @@ public class PlayerMovement : MonoBehaviour
             Vector3 moveDirection = (holdAreaPosition - heldObj.transform.position);
             objRigidbody.AddForce(moveDirection);
         }
+    }
+
+    public GameObject getItem(){
+        GameObject item = heldObj;
+        heldObj = null;
+        return item;
+    }
+
+    public void giveItem(GameObject item){
+        pick(item);
     }
 
 }
